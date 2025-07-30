@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import {
   Form,
@@ -8,6 +9,7 @@ import {
   FormFeedback,
 } from "reactstrap";
 import axios from "axios";
+axios.defaults.headers.common["x-api-key"] = "reqres-free-v1";
 
 // for clear the form after submitted it
 const initialFormData = {
@@ -38,6 +40,9 @@ export default function Register() {
     password: false,
   });
   const [isValid, setIsValid] = useState(false);
+
+  //setter for catch response id to show user_id on screen
+  const [userId, setUserId] = useState("");
 
   //function for validate email
   const validateEmail = (email) => {
@@ -109,12 +114,13 @@ export default function Register() {
       .post("https://reqres.in/api/users", formData)
       .then((response) => {
         console.log(response);
+        //for clear the form
+        setFormData(initialFormData);
+        setUserId(response.data.id);
       })
       .catch((error) => {
         console.log(error);
       });
-    //for clear form
-    setFormData(initialFormData);
   }
 
   return (
@@ -177,6 +183,11 @@ export default function Register() {
           )}
         </FormGroup>
         <Button disabled={!isValid}>Kayit Ol</Button>
+        {userId != "" && (
+          <FormGroup>
+            <Label for="userId">User ID : {userId}</Label>
+          </FormGroup>
+        )}
       </Form>
     </>
   );
