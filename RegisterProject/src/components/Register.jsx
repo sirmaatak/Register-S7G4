@@ -9,6 +9,8 @@ import {
   FormFeedback,
 } from "reactstrap";
 import axios from "axios";
+//import { useHistory } from "react-router-dom";
+
 axios.defaults.headers.common["x-api-key"] = "reqres-free-v1";
 
 // for clear the form after submitted it
@@ -43,6 +45,9 @@ export default function Register() {
 
   //setter for catch response id to show user_id on screen
   const [userId, setUserId] = useState("");
+
+  //for redirect the page when submit success
+  //const history = useHistory();
 
   //function for validate email
   const validateEmail = (email) => {
@@ -117,6 +122,7 @@ export default function Register() {
         //for clear the form
         setFormData(initialFormData);
         setUserId(response.data.id);
+        //history.push("./Success.jsx");
       })
       .catch((error) => {
         console.log(error);
@@ -136,6 +142,7 @@ export default function Register() {
             onChange={handleChange}
             value={formData.name}
             invalid={errors.name}
+            data-cy="name-input"
           />
           {errors.name && <FormFeedback>{errorMessages.name}</FormFeedback>}
         </FormGroup>
@@ -149,6 +156,7 @@ export default function Register() {
             onChange={handleChange}
             value={formData.surname}
             invalid={errors.surname}
+            data-cy="surname-input"
           />
           {errors.surname && (
             <FormFeedback>{errorMessages.surname}</FormFeedback>
@@ -164,6 +172,7 @@ export default function Register() {
             onChange={handleChange}
             value={formData.email}
             invalid={errors.email}
+            data-cy="email-input"
           />
           {errors.email && <FormFeedback>{errorMessages.email}</FormFeedback>}
         </FormGroup>
@@ -177,17 +186,18 @@ export default function Register() {
             onChange={handleChange}
             value={formData.password}
             invalid={errors.password}
+            data-cy="password-input"
           />
           {errors.password && (
             <FormFeedback>{errorMessages.password}</FormFeedback>
           )}
         </FormGroup>
-        <Button disabled={!isValid}>Kayit Ol</Button>
-        {userId != "" && (
-          <FormGroup>
-            <Label for="userId">User ID : {userId}</Label>
-          </FormGroup>
-        )}
+        <Button disabled={!isValid} data-cy="submit-input">
+          Kayit Ol
+        </Button>
+        <FormGroup>
+          <Label for="userId">User ID : {userId}</Label>
+        </FormGroup>
       </Form>
     </>
   );
